@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>Example 02</title>
+  <script src="https://raw.github.com/timrwood/moment/2.0.0/min/moment.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="http://github.com/DmitryBaranovskiy/raphael/raw/master/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../simplechart.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+          <div id="canvas"></div>
+          <script>
+
+          var data = [
+            { date: moment().subtract('days', 7), usage: "132.4 kWh" },
+            { date: moment().subtract('days', 6), usage: "15.5 kWh" },
+            { date: moment().subtract('days', 5), usage: "102.8 kWh" },
+            { date: moment().subtract('days', 3), usage: "117.6 kWh" },
+            { date: moment().subtract('days', 2), usage: "36.3 kWh" },
+            { date: moment().subtract('days', 1), usage: "194.2 kWh" }
+          ];
+
+          // start by creating a SimpleChart.CartesianCanvas(). This method
+          // takes the same arguments as raphael.Paper()
+          var canvas = new SimpleChart.CartesianCanvas('canvas', 512, 300);
+
+          // now let's create a line chart
+          var usage_chart = new SimpleChart.LineChart(data);
+
+          // tell the chart how to convert to [x, y]
+          usage_chart.translate(function(point) {
+            return [point.date.unix(), parseFloat(point.usage.match(/(-?)[0-9]+/)[0])];
+          });
+
+          // add our line graph to the canvas
+          canvas.add_chart(usage_chart);
+
+          // and render
+          canvas.render();
+
+          </script>
+</body>
+</html>

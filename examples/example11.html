@@ -1,0 +1,96 @@
+<html>
+<head>
+  <title>Example 11</title>
+  <script src="https://raw.github.com/timrwood/moment/2.0.0/min/moment.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="http://github.com/DmitryBaranovskiy/raphael/raw/master/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../simplechart.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+          <div id="canvas"></div>
+          <script>
+
+          var data = [
+            { date: moment().subtract('days', 7), usage: "132.4 kWh" },
+            { date: moment().subtract('days', 6), usage: "15.5 kWh" },
+            { date: moment().subtract('days', 5), usage: "102.8 kWh" },
+            { date: moment().subtract('days', 3), usage: "117.6 kWh" },
+            { date: moment().subtract('days', 2), usage: "36.3 kWh" },
+            { date: moment().subtract('days', 1), usage: "194.2 kWh" }
+          ];
+
+          // start by creating a SimpleChart.CartesianCanvas(). This method
+          // takes the same arguments as raphael.Paper()
+          var canvas = new SimpleChart.CartesianCanvas('canvas', 512, 300);
+
+          // set the range explicitly
+          canvas.x_range([moment().subtract('days', 8).unix(), moment().unix()]);
+          canvas.y_range([0, 200]);
+
+          // set the x_ticks to use the x-data
+          canvas.x_ticks(data.map(function(entry) {
+            return entry.date.clone().startOf('day').add('hours', 12).unix();
+          }));
+
+          // this function very conveniently gets the x location *and* the index of the
+          // ticks.  We know that are ticks are 1::1 with our data, which has moment
+          // objects, which are easily formatted!
+          canvas.x_label(function(x, index, element) {
+            element.attr({'font-size': 12, 'font-family': 'Helvetica', 'transform': 'r-45,0,0'})
+            var date = data[index].date;
+            return date.fromNow();
+          });
+
+          canvas.y_label(function(y, index, element) {
+            element.attr({'font-size': 12, 'font-family': 'Helvetica'})
+          });
+
+          canvas.padding([-10, -50, 0, -25]);
+
+          // now let's create a line chart
+          var usage_chart = new SimpleChart.LineChart(data);
+
+          usage_chart.paths(function(points) {
+            // this is what gets returned
+            var retval = [];
+
+            // we store each previous point so we have something to compare the
+            // current point to
+            var prev_point = null;
+
+            // we'll return the last list of points that should make up a path
+            var buffer = points.reduce(function(memo, point) {
+              // if the distance between two points is more than one day
+              if (prev_point && point[0] - prev_point[0] > 86400) {
+                // add the current stack of points to the retval
+                retval.push(memo);
+                // and start over
+                memo = [];
+              }
+              memo.push(point);
+              prev_point = point;
+              return memo;
+            }, []);
+
+            // and add the last list of points (that didn't get added using
+            // prev_point)
+            retval.push(buffer);
+            return retval;
+          });
+          usage_chart.path(true);
+
+          usage_chart.dot(true);
+
+          // tell the chart how to convert to [x, y]
+          usage_chart.translate(function(point) {
+            return [point.date.unix(), parseFloat(point.usage.match(/(-?)[0-9]+/)[0])];
+          });
+
+          // add our line graph to the canvas
+          canvas.add_chart(usage_chart);
+
+          // and render
+          canvas.render();
+
+          </script>
+</body>
+</html>

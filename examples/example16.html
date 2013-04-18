@@ -1,0 +1,184 @@
+<html>
+<head>
+  <title>Example 16</title>
+  <script src="https://raw.github.com/timrwood/moment/2.0.0/min/moment.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="http://github.com/DmitryBaranovskiy/raphael/raw/master/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../simplechart.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+          <div id="canvas"></div>
+          <script>
+
+          var data = [
+            { date: moment().subtract('days', 7), usage: "132.4 kWh" },
+            { date: moment().subtract('days', 6), usage: "15.5 kWh" },
+            { date: moment().subtract('days', 5), usage: "102.8 kWh" },
+            { date: moment().subtract('days', 3), usage: "117.6 kWh" },
+            { date: moment().subtract('days', 2), usage: "36.3 kWh" },
+            { date: moment().subtract('days', 1), usage: "194.2 kWh" }
+          ];
+
+          // start by creating a SimpleChart.CartesianCanvas(). This method
+          // takes the same arguments as raphael.Paper()
+          var canvas = new SimpleChart.CartesianCanvas('canvas', 512, 300);
+
+          // we will add our graph decoration to the bottom
+          canvas.decorations(function(above, below) {
+            var corner_radius = 15;
+            var left = canvas.get_graph_left();
+            var top = canvas.get_graph_bottom() - corner_radius;
+            var width = canvas.get_graph_width();
+            var height = canvas.get_graph_margin_bottom() + corner_radius;
+            var rect = canvas.raphael.rect(left, top, width, height);
+            rect.attr({r: corner_radius, 'stroke': '#ddd', 'stroke-width': 1, 'fill': '#eee'});
+            below.push(rect);
+          });
+
+          // set the range explicitly
+          canvas.x_range([moment().subtract('days', 8).unix(), moment().unix()]);
+          canvas.y_range([0, 200]);
+
+          // add a subtle blue color fill to the graph
+          canvas.border({'stroke-width': 0.5, 'fill': '#ebeefe'});
+
+          // set the x_ticks to use the x-data
+          canvas.x_ticks(data.map(function(entry) {
+            return entry.date.clone().startOf('day').add('hours', 12).unix();
+          }));
+
+          // this function very conveniently gets the x location *and* the index of the
+          // ticks.  We know that are ticks are 1::1 with our data, which has moment
+          // objects, which are easily formatted!
+          canvas.x_label(function(x, index, element) {
+            element.attr({'font-size': 12, 'font-family': 'Helvetica', 'transform': 'r-45,0,0'})
+            var date = data[index].date;
+            return date.fromNow();
+          });
+
+          canvas.y_label(function(y, index, element) {
+            // disable the label at 0
+            if ( y == 0 )
+              return false;
+            // Add a transform and anchor the text to the 'start', which makes it left-aligned
+            element.attr({'font-size': 12, 'font-family': 'Helvetica', 'transform': 't10,6', 'text-anchor': 'start'});
+          });
+
+          // the {xy}_tick handlers are funky ones - you return the rect that
+          // represents the size of the tick.  You can style it, too, but the
+          // rect is important.  The [0, 0] point of the tick is centered at the
+          // [x, y] location of the tick.  In this case we will make the tick
+          // *inside* the graph.
+          // Just to make things extra crazy, this function is handed the axis,
+          // so you can conceivably use it to format more than one axis.  Let's
+          // try it!
+          canvas.y_tick(function(y, index, tick_element, axis) {
+            // skip the first and last tick, they look add drawn on top of the graph
+            // if you're tempted to use `y_ticks` to set the ticks, and not
+            // include 0 or 200, you might be surprised to find that the label
+            // would not be drawn in that case.  If you want a label with no
+            // tick, you need to return null in this function, but include the
+            // tick in the `{xy}_ticks` list.
+            if ( y == 0 || y == 200 ) {
+              return null;
+            }
+            tick_element.attr({'stroke': null, 'fill': 'black'});
+            if (axis == 'y') {
+              return [0, 0, 3, 1];  // x:0 starts at the graph edge.
+            }
+            // but the y2 axis is "swapped", we need to start at x:-3
+            else if (axis == 'y2') {
+              return [-3, 0, 3, 1];
+            }
+          });
+          // to get these handlers, you call the function with no arguments. The
+          // values are actually stored in a "private" variable, and getting the
+          // actual values is a different process altogether.
+          canvas.y2_tick(canvas.y_tick());  // get the y_tick handler, and assign it to y2_tick.
+          canvas.y2_ticks(canvas.y_ticks());  // same for the y2_ticks locations
+          canvas.y2_label(null);  // but disable the labels
+
+          // adjust the padding - we don't need any space on the left, so let's
+          // use a function so we can calculate that at runtime!
+          canvas.padding(function() {
+            // there is also a method `get_graph_margin_left`, but it depends on
+            // `padding`.  So don't use it here!
+            var margin_left = this.get_x_tick_width();
+            var margin_right = this.get_x2_tick_width();
+            return [-10, -margin_left, 0, -margin_right];
+          });
+
+          // now let's create a line chart
+          var usage_chart = new SimpleChart.LineChart(data);
+
+          usage_chart.paths(function(points) {
+            // this is what gets returned
+            var retval = [];
+
+            // we store each previous point so we have something to compare the
+            // current point to
+            var prev_point = null;
+
+            // we'll return the last list of points that should make up a path
+            var buffer = points.reduce(function(memo, point) {
+              // if the distance between two points is more than one day
+              if (prev_point && point[0] - prev_point[0] > 86400) {
+                // add the current stack of points to the retval
+                retval.push(memo);
+                // and start over
+                memo = [];
+              }
+              memo.push(point);
+              prev_point = point;
+              return memo;
+            }, []);
+
+            // and add the last list of points (that didn't get added using
+            // prev_point)
+            retval.push(buffer);
+            return retval;
+          });
+          usage_chart.path(true);
+
+          // create a new set
+          var overlay = canvas.raphael.set();
+          // set its zIndex - this is NOT a raphael property!  It's an addition
+          // that SimpleChart adds to make "layers" easy.
+          // Anything at or above `SimpleChart.zIndex.top` is guaranteed to be
+          // on top.
+          overlay.zIndex = SimpleChart.zIndex.top;
+          usage_chart.dot(function(point, index, dots) {
+            // and we just use our overlayoverlay
+            overlay.push(this.canvas.raphael.circle(point[0], point[1], 10).attr({stroke: 'blue', 'stroke-width': 4}));
+          });
+          // if you don't do this step, you're gonna have a bad time.
+          usage_chart.sets.overlay = overlay;
+
+          // add a fill handler - we can use a different fill for the different paths
+          usage_chart.fill_x(function(path_points, path_index, path_element) {
+            var fill;
+            if ( path_index == 0 ) {
+              // raphael gradient fill syntax takes some getting used to. this one is a
+              // vertical (rotated 90°) gradient, starting at white, then pink, then light
+              // gray
+              fill = '90-#fff-#fee:20-#eee';
+            }
+            else {
+              fill = 'url(p5.png)';
+            }
+            return {fill: fill};
+          });
+
+          // tell the chart how to convert to [x, y]
+          usage_chart.translate(function(point) {
+            return [point.date.unix(), parseFloat(point.usage.match(/(-?)[0-9]+/)[0])];
+          });
+
+          // add our line graph to the canvas
+          canvas.add_chart(usage_chart);
+
+          // and render
+          canvas.render();
+
+          </script>
+</body>
+</html>
