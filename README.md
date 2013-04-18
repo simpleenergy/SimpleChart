@@ -46,7 +46,7 @@ canvas.add_chart(usage_chart);
 canvas.render();
 ```
 
-![Example 01][github.com/simpleenergy/SimpleChart/examples/example01.png]
+![Example 01](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example01.png "Example 01")
 
 Looks awful!  Actually, it's amazing that it rendered anything, it's trying to
 draw *objects*!
@@ -63,7 +63,7 @@ usage_chart.translate(function(point) {
 });
 ```
 
-![Example 02][github.com/simpleenergy/SimpleChart/examples/example02.png]
+![Example 02](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example02.png "Example 02")
 
 It's like I said:
 
@@ -85,7 +85,7 @@ manually, we can easily add some padding to the graph.
 canvas.margins([10, 43200, 0, 43200]);  // CSS order: top, right, bottom, left
 ```
 
-![Example 03][github.com/simpleenergy/SimpleChart/examples/example03.png]
+![Example 03](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example03.png "Example 03")
 
 Neat.  But if we *do* know our ranges, we can set those, too.  This setting
 *overrides* the `margins` setting.
@@ -97,7 +97,7 @@ canvas.x_range([moment().subtract('days', 8).unix(), moment().unix()]);
 canvas.y_range([0, 200]);
 ```
 
-![Example 04][github.com/simpleenergy/SimpleChart/examples/example04.png]
+![Example 04](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example04.png "Example 04")
 
 Let's work on those axis labels.  The default behavior is to create ticks that
 are evenly spaced on the axis.  It's easy, though, to put them wherever we want.
@@ -113,7 +113,7 @@ canvas.x_ticks(data.map(function(entry) {
 }));
 ```
 
-![Example 05][github.com/simpleenergy/SimpleChart/examples/example05.png]
+![Example 05](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example05.png "Example 05")
 
 As much as I love unix timestamps (the one time to rule them all!), it's not
 what most designers and projects managers and clients would call "human
@@ -133,7 +133,7 @@ canvas.x_label(function(x, index) {
 });
 ```
 
-![Example 06][github.com/simpleenergy/SimpleChart/examples/example06.png]
+![Example 06](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example06.png "Example 06")
 
 Our line graph isn't very... "graphy" without lines.  Let's add lines.
 
@@ -142,7 +142,7 @@ Our line graph isn't very... "graphy" without lines.  Let's add lines.
 usage_chart.path(true);
 ```
 
-![Example 07][github.com/simpleenergy/SimpleChart/examples/example07.png]
+![Example 07](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example07.png "Example 07")
 
 Hmm, that's not right - there is a day missing, and I would expect that to
 reflect in the graph.  Yeah, we can do that.
@@ -180,7 +180,7 @@ usage_chart.paths(function(points) {
 });
 ```
 
-![Example 08][github.com/simpleenergy/SimpleChart/examples/example08.png]
+![Example 08](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example08.png "Example 08")
 
 If you want, add the missing point to the data and see if it connects the line.
 I will not do this with you, so I suppose it is guaranteed that there is some
@@ -208,7 +208,7 @@ canvas.y_label(function(y, index, element) {
 });
 ```
 
-![Example 09][github.com/simpleenergy/SimpleChart/examples/example09.png]
+![Example 09](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example09.png "Example 09")
 
 Spectacular!
 
@@ -231,7 +231,7 @@ canvas.padding([-10, -80, -20, -50]);
 
 I'm going to fix these eye-bleeding fonts.  It was a lame joke anyway.
 
-![Example 10][github.com/simpleenergy/SimpleChart/examples/example10.png]
+![Example 10](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example10.png "Example 10")
 
 Fancy dots!  These are interesting because if you override the default you'll
 immediately get no dot at all:
@@ -241,7 +241,7 @@ immediately get no dot at all:
 usage_chart.dot(true)
 ```
 
-![Example 11][github.com/simpleenergy/SimpleChart/examples/example11.png]
+![Example 11](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example11.png "Example 11")
 
 Maybe interesting is the wrong word.  The reason the dots are wiped out is
 because the `dot` function is not handed a Raphaël circle, that would be too
@@ -259,7 +259,7 @@ usage_chart.dot(function(point, index, dots) {
 });
 ```
 
-![Example 12][github.com/simpleenergy/SimpleChart/examples/example12.png]
+![Example 12](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example12.png "Example 12")
 
 If you are *really* paying attention, you'll notice that the dots are clipped so
 that they fit inside the graph area.  That's because it's awesome, and they
@@ -297,7 +297,7 @@ usage_chart.dot(function(point, index, dots) {
 usage_chart.sets.overlay = overlay;
 ```
 
-![Example 13][github.com/simpleenergy/SimpleChart/examples/example13.png]
+![Example 13](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example13.png "Example 13")
 
 Fill effects, and let's not waste any more time with formalities!  We're going
 to add a color fill, a gradient fill, and a pattern fill.
@@ -324,7 +324,7 @@ usage_chart.fill_x(function(path_points, path_index, path_element) {
 });
 ```
 
-![Example 14][github.com/simpleenergy/SimpleChart/examples/example14.png]
+![Example 14](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example14.png "Example 14")
 
 Let's move the ticks and labels on the y-axis *inside* the graph, add y2-axis
 ticks that are in the same position as the y-axis ticks.
@@ -374,7 +374,7 @@ canvas.padding(function() {
 });
 ```
 
-![Example 15][github.com/simpleenergy/SimpleChart/examples/example15.png]
+![Example 15](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example15.png "Example 15")
 
 Another nice graphical thingy to have would be a gray bar along the bottom.
 This will use properties of the canvas that are computed in the `render` method,
@@ -398,7 +398,7 @@ canvas.decorations(function(above, below) {
 });
 ```
 
-![Example 16][github.com/simpleenergy/SimpleChart/examples/example16.png]
+![Example 16](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example16.png "Example 16")
 
 Whew!  You still with us?  We've almost covered every darn option there is for
 the line chart.  Just a few more.
@@ -416,7 +416,7 @@ usage_chart.segment(function(points, index, path) {
 });
 ```
 
-![Example 17][github.com/simpleenergy/SimpleChart/examples/example17.png]
+![Example 17](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example17.png "Example 17")
 
 To take this further you would want to modify the `fill_x` handler to draw a new
 path that uses this same curve.  I won't do it.  Not because I can't.  I totally
@@ -449,7 +449,7 @@ usage_chart.fill_x(function(path_points, path_index, path_element) {
 });
 ```
 
-![Example 18][github.com/simpleenergy/SimpleChart/examples/example18.png]
+![Example 18](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example18.png "Example 18")
 
 Those paying very close attention will have notice that `paths` is giving the
 entire list of data points as they are returned by our translate handler, but
@@ -486,7 +486,7 @@ prev_usage_chart.translate(function(point) {
 canvas.add_chart(prev_usage_chart);
 ```
 
-![Example 19][github.com/simpleenergy/SimpleChart/examples/example19.png]
+![Example 19](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example19.png "Example 19")
 
 BoxCharts have much less complexity than LineCharts - they just draw bars, after
 all.  Much like the `dots` handler, the box handler is handed a set into which
