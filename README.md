@@ -539,7 +539,7 @@ var pong = function() {
 setTimeout(ping, 1000);
 ```
 
-![Example 21](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example21.png "Example 21")
+![Example 21](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example21.mp4 "Example 21")
 
 As long as I don't point out that the gradient doesn't fade in and out, you
 won't notice, right?  Crap!?  You noticed.  Now you can't stop looking at it!!
