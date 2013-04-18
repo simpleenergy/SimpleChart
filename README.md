@@ -520,6 +520,8 @@ prev_usage_chart.box(function(rect, box_i, boxes) {
 });
 ```
 
+![Example 20](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example20.png "Example 20")
+
 Lastly, it's easy to turn charts on and off.  You can `show` and `hide` charts,
 or use `fadein` and `fadeout`.
 
@@ -536,6 +538,8 @@ var pong = function() {
 };
 setTimeout(ping, 1000);
 ```
+
+![Example 21](https://raw.github.com/simpleenergy/SimpleChart/master/examples/example21.png "Example 21")
 
 As long as I don't point out that the gradient doesn't fade in and out, you
 won't notice, right?  Crap!?  You noticed.  Now you can't stop looking at it!!
