@@ -242,6 +242,11 @@
     options.y_tick = default_tick;
     options.y2_tick = default_tick;
 
+    options.x_tick_space = function() { return Math.max(this._x_tick_height, this._y_tick_height); };
+    options.x2_tick_space = function() { return Math.max(this._x2_tick_height, this._y_tick_height); };
+    options.y_tick_space = function() { return Math.max(this._x_tick_width, this._y_tick_width); };
+    options.y2_tick_space = function() { return Math.max(this._x_tick_width, this._y2_tick_width); };
+
     options.x_lines = [];
     options.y_lines = [];
 
@@ -386,26 +391,21 @@
     return this.get_max_graph_y() + margin_top;
   };
 
-  CartesianCanvas.prototype.get_x_tick_width = function() { return Math.max(this._x_tick_width, this._y_tick_width); };
-  CartesianCanvas.prototype.get_x2_tick_width = function() { return Math.max(this._x_tick_width, this._y2_tick_width); };
-  CartesianCanvas.prototype.get_y_tick_width = function() { return Math.max(this._x_tick_height, this._y_tick_height); };
-  CartesianCanvas.prototype.get_y2_tick_width = function() { return Math.max(this._x2_tick_height, this._y_tick_height); };
-
   CartesianCanvas.prototype.get_graph_margin_left = function get_graph_margin_left() {
     var padding = this.get_padding();
-    return padding[3] + this.get_x_tick_width();
+    return padding[3] + this.get_y_tick_space();
   };
   CartesianCanvas.prototype.get_graph_left = CartesianCanvas.prototype.get_graph_margin_left;
 
   CartesianCanvas.prototype.get_graph_margin_top = function get_graph_margin_top() {
     var padding = this.get_padding();
-    return padding[0] + this.get_y2_tick_width();
+    return padding[0] + this.get_x2_tick_space();
   };
   CartesianCanvas.prototype.get_graph_top = CartesianCanvas.prototype.get_graph_margin_top;
 
   CartesianCanvas.prototype.get_graph_margin_right = function get_graph_margin_right() {
     var padding = this.get_padding();
-    return padding[1] + this.get_x2_tick_width();
+    return padding[1] + this.get_y2_tick_space();
   };
   CartesianCanvas.prototype.get_graph_right = function get_graph_margin_right() {
     return this.raphael.width - this.get_graph_margin_right();
@@ -413,7 +413,7 @@
 
   CartesianCanvas.prototype.get_graph_margin_bottom = function get_graph_margin_bottom() {
     var padding = this.get_padding();
-    return padding[2] + this.get_y_tick_width();
+    return padding[2] + this.get_x_tick_space();
   };
   CartesianCanvas.prototype.get_graph_bottom = function get_graph_margin_bottom() {
     return this.raphael.height - this.get_graph_margin_bottom();
@@ -517,7 +517,8 @@
     'x_label', 'x_label_transform',
     'x2_label', 'x2_label_transform',
     'y_label', 'y_label_transform',
-    'y2_label', 'y2_label_transform'
+    'y2_label', 'y2_label_transform',
+    'x_tick_space', 'x2_tick_space', 'y_tick_space', 'y2_tick_space'
   ];
   for ( setter_i = 0; setter_i < setters.length; setter_i++ ) {
     (function(attr) {
