@@ -60,7 +60,7 @@
     this.height = height;
   };
 
-  // `nodes` is a collection of Elements and Sets. This method applies a
+  // `elements` is a collection of Elements and Sets. This method applies a
   // function only to the elements.
   var raphaelSetApply = function(elements, fn, ret) {
     if ( ! ret )
