@@ -102,8 +102,8 @@
           canvas.padding(function() {
             // there is also a method `get_graph_margin_left`, but it depends on
             // `padding`.  So don't use it here!
-            var margin_left = this.get_x_tick_width();
-            var margin_right = this.get_x2_tick_width();
+            var margin_left = this.get_x_tick_space();
+            var margin_right = this.get_x2_tick_space();
             return [-10, -margin_left, 0, -margin_right];
           });
 
